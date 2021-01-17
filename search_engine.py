@@ -3,7 +3,6 @@ import faiss
 import pandas as pd
 from collections import defaultdict
 import os
-import torch
 
 
 def load_npy_file(fn):
@@ -37,9 +36,7 @@ class ImageSearchEngine:
                 quantizer = faiss.IndexFlatIP(dim)
                 num_clusters = 100
                 index = faiss.IndexIVFFlat(quantizer, dim, num_clusters, faiss.METRIC_INNER_PRODUCT)
-                print('Training...')
                 index.train(features)
-                print('Training done!!!')
                 index.add(features)
         else:
             assert os.path.exists(path), f"{path} is not existed!"
@@ -77,30 +74,4 @@ def load_inverted_index(train_csv_path):
     data_df = pd.DataFrame(data_df, columns=['index', 'image_id', 'image_path'])
     image_index2info = dict((data_df.apply(lambda x: (x[0], {'image_id': x[1], 'path': x[2], }), axis=1)).values)
     return image_index2info
-    
-
-
-if __name__ == '__main__':
-    index_path = 'dump/dump_index_resnet.pkl'
-    image_index2info = load_invert_indexed(image_ids_fn='data/all_feat.list', image_info_fn='data/all_images_path.csv')
-
-    features = load_npy_file('features_resnet50.npy')
-    path = None
-
-    test_features = load_npy_file('features_resnet50.npy')
-    test_features = test_features / ((test_features ** 2).sum(axis=1, keepdims=True) ** 0.5)
-
-    search_engine = ImageSearchEngine(
-        path=path,
-        features=features,
-        image_index2info=image_index2info,
-        train=True,
-    )
-
-    k = 10
-    results = search_engine.search(test_features[[13134]], k)
-    print(results[0])
-
-    
-
 
