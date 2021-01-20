@@ -1,0 +1,14 @@
+starlette==0.13.6
+fastai==1.0.61
+pandas==1.2.0
+--find-links https://download.pytorch.org/whl/torch_stable.html 
+torch==1.7.1+cpu
+torch
+torchvision
+numpy==1.18.5
+uvicorn==0.13.3
+faiss-cpu
+faiss-gpu
+fastapi==0.63.0
+Pillow==8.1.0
+python-multipart
