@@ -13,6 +13,10 @@ COPY requirements.txt requirements.txt
 
 RUN pip install -r requirements.txt
 
+COPY download.sh download.sh
+
+RUN sh download.sh
+
 COPY . .
 
 EXPOSE 8080
